@@ -1,4 +1,4 @@
-# NavigationDrawer_Sample
+# NavigationDrawerWithFragment
 
 ### Support Library Dependencies
 
@@ -6,7 +6,7 @@
 implementation 'com.android.support:design:28.0.0-rc01'
 ```
 
-### [activity_main.xml](https://github.com/iamvickyav/NavigationDrawer_Sample/blob/master/app/src/main/res/layout/activity_main.xml)
+### activity_main.xml
 
 **Add NavigationView inside DrawerLayout**
 **FrameLayout below will display as main body of the screen**
@@ -25,13 +25,6 @@ implementation 'com.android.support:design:28.0.0-rc01'
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Hello SRM"/>
             
     </FrameLayout>
 
@@ -67,7 +60,7 @@ implementation 'com.android.support:design:28.0.0-rc01'
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_account"
             android:icon="@drawable/account"
             android:title="Account" />
         <item
@@ -75,7 +68,7 @@ implementation 'com.android.support:design:28.0.0-rc01'
             android:icon="@drawable/gallery"
             android:title="Gallery" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/settings"
             android:title="Settings" />
     </group>
@@ -109,7 +102,90 @@ implementation 'com.android.support:design:28.0.0-rc01'
 </RelativeLayout>
 ```
 
-### [MainActivity.java](https://github.com/iamvickyav/NavigationDrawer_Sample/blob/master/app/src/main/java/com/iamvickyav/jarvis/navdrawersample/MainActivity.java)
+### fragment_1.xml
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Fragment 1"
+        android:id="@+id/textView1"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
+```
+### fragment_2.xml
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Fragment 2"
+        android:id="@+id/textView2"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
+```
+### fragment_3.xml
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Fragment 3"
+        android:id="@+id/textView3"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
+```
+### Fragment1.java
+```java
+public class Fragment1 extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_1, container, false);
+    }
+}
+```
+
+### Fragment2.java
+```java
+public class Fragment1 extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_2, container, false);
+    }
+}
+```
+
+### Fragment3.java
+```java
+public class Fragment1 extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_3, container, false);
+    }
+}
+```
+### MainActivity.java
 
 ```java
 public class MainActivity extends AppCompatActivity {
@@ -130,8 +206,27 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Fragment fragment = null;
+                switch (menuItem.getItemId()) {
+
+                    case R.id.nav_account:
+                        fragment = new Fragment1();
+                        break;
+                    case R.id.nav_gallery:
+                        fragment = new Fragment2();
+                        break;
+                    case R.id.nav_settings:
+                        fragment = new Fragment3();
+                        break;
+                }
+
+                if (fragment != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.content_frame, fragment);
+                    ft.commit();
+                }
+
                 menuItem.setChecked(true);
-                textView.setText(menuItem.getTitle());
                 drawerLayout.closeDrawers();
                 return true;
             }
@@ -141,3 +236,4 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 Reference : [Implementing Navigation Drawer](https://developer.android.com/training/implementing-navigation/nav-drawer)
+[Adding Fragments in Navigation Drawer](https://www.simplifiedcoding.net/android-navigation-drawer-example-using-fragments/#Adding-Navigation-Drawer-Activity)
